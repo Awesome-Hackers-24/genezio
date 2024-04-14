@@ -1,6 +1,8 @@
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
 import { Address, Account } from "@multiversx/sdk-core";
 import { GenezioDeploy } from "@genezio/types";
+import { apiUrl, collectionName } from "./utils/constants";
+import axios from "axios"
 
 export type Response = {
   nonce: number;
@@ -9,7 +11,7 @@ export type Response = {
 
 @GenezioDeploy()
 export class MultiversXService {
-  networkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com");
+  networkProvider = new ApiNetworkProvider(apiUrl);
 
   async queryAddress(address: string): Promise<Response> {
     console.log("Query info about address", address);
@@ -32,7 +34,12 @@ export class MultiversXService {
     let addressOfUser = new Address(address);
     let user = new Account(addressOfUser);
 
-
+    axios.get(`${apiUrl}/collections/${collectionName}`).then((response) => {
+      console.log(response.data)
+    }
+    ).catch((error) => {
+      console.log(error)
+    })
 
 
     return {
